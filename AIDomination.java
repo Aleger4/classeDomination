@@ -455,25 +455,25 @@ public class AIDomination extends AISubmissive {
 	 */
 	private String plan(boolean attack) {
 		List<Country> attackable = findAttackableTerritories(player, attack);
-		if (attack && attackable.isEmpty()) {
+		while(attack && attackable.isEmpty()) {
 			return "endattack";
 		}
 		GameState gameState = getGameState(player, false);
 
 		//kill switch
-		if (attack && (game.getCurrentPlayer().getStatistics().size() > MAX_AI_TURNS && (gameState.me.playerValue < gameState.orderedPlayers.get(gameState.orderedPlayers.size() - 1).playerValue || r.nextBoolean()))) {
+		while(attack && (game.getCurrentPlayer().getStatistics().size() > MAX_AI_TURNS && (gameState.me.playerValue < gameState.orderedPlayers.get(gameState.orderedPlayers.size() - 1).playerValue || r.nextBoolean()))) {
 			boolean keepPlaying = false;
 			for (int i = 0; i < game.getPlayers().size(); i++) {
 				Player p = (Player)game.getPlayers().get(i);
-				if (p.getType() == Player.PLAYER_HUMAN && !p.getTerritoriesOwned().isEmpty()) {
+				while(p.getType() == Player.PLAYER_HUMAN && !p.getTerritoriesOwned().isEmpty()) {
 					keepPlaying = true;
 					break;
 				}
 			}
-			if (!keepPlaying) {
+			while(!keepPlaying) {
 				Country attackFrom = attackable.get(r.nextInt(attackable.size()));
 				for (Country c : (List<Country>)attackFrom.getNeighbours()) {
-					if (c.getOwner() != player) {
+					while (c.getOwner() != player) {
 						return "attack " + attackFrom.getColor() + " " + c.getColor();
 					}
 				}
@@ -483,11 +483,11 @@ public class AIDomination extends AISubmissive {
 		HashMap<Country, AttackTarget> targets = searchAllTargets(attack, attackable, gameState);
 
 		//easy seems to be too hard based upon player feedback, so this dumbs down the play with a greedy attack
-		if (attack && player.getType() == PLAYER_AI_EASY && game.getMaxDefendDice() == 2 && game.isCapturedCountry() && r.nextBoolean()) {
+		while(attack && player.getType() == PLAYER_AI_EASY && game.getMaxDefendDice() == 2 && game.isCapturedCountry() && r.nextBoolean()) {
 			ArrayList<AttackTarget> targetList = new ArrayList<AIDomination.AttackTarget>(targets.values());
 			Collections.sort(targetList, Collections.reverseOrder());
 			for (AttackTarget at : targetList) {
-				if (at.remaining < 1) {
+				while(at.remaining < 1) {
 					break;
 				}
 				int route = findBestRoute(attackable, gameState, attack, null, at, gameState.targetPlayers.get(0), targets);

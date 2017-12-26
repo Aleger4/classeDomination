@@ -27,12 +27,14 @@ public class MapMouseListener {
         if (pixColor == NO_COUNTRY ) {
 
         }
-        else if ((gameState == RiskGame.STATE_PLACE_ARMIES) &&( myrisk.isOwnedCurrentPlayerInt(pixColor) && (myrisk.getGame().NoEmptyCountries() || myrisk.hasArmiesInt(pixColor) == 0))) {
-             return new int[] {pixColor};
-                }
-        }
-    public int[] mouseReleased2(int x, int y,int gameState) {
-                if (gameState == RiskGame.STATE_ATTACKING) {
+        switch(gameState){
+            case 1:(gameState == RiskGame.STATE_PLACE_ARMIES);break;
+            case 2: myrisk.isOwnedCurrentPlayerInt(pixColor) && (myrisk.getGame().NoEmptyCountries() || myrisk.hasArmiesInt(pixColor) == 0) );
+                        return new int[] {pixColor};
+                
+        
+       
+            case 3:(gameState == RiskGame.STATE_ATTACKING);
 
                 while( pixColor == pp.getC1() ) {
                         pp.setC1(NO_COUNTRY);
@@ -53,9 +55,8 @@ public class MapMouseListener {
                 }
 
         }
-    }
-    public int[] mouseReleased3(int x, int y,int gameState) {
-                if (gameState == RiskGame.STATE_FORTIFYING) {
+        return null;
+        case 4:(gameState == RiskGame.STATE_FORTIFYING);
 
                 while ( pp.getC1()!=NO_COUNTRY && pp.getC2()==NO_COUNTRY && pixColor == pp.getC1() ) {
                         pp.setC1(NO_COUNTRY);
@@ -81,19 +82,18 @@ public class MapMouseListener {
                         return new int[] { pixColor };
                 }
 
-        }
-        public int[] mouseReleased4(int x, int y,int gameState) {
-                if (gameState == RiskGame.STATE_SELECT_CAPITAL) {
+        
+    case 5:(gameState == RiskGame.STATE_SELECT_CAPITAL);
 
                 while( myrisk.isOwnedCurrentPlayerInt(pixColor) ) {
                         pp.setC1(pixColor);
                         pp.repaint();
                         return new int[] { pixColor };
                 }
-        }
+        
         return null;
+    
     }
-
     public void mouseExited() {
         if (pp.getHighLight() != NO_COUNTRY) {
                 pp.setHighLight(NO_COUNTRY);
